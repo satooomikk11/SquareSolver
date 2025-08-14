@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <math.h>
 
+
+int sravn(double a, double b) {
+	if (fabs(a - b) > 0.000001) {
+    	return 0; // Числа не равны
+	} else {
+		return 1; // Числа равны
+	}
+}
+
+
 int main() {
     double a = 1, b = 1, c = 1; // Коэффициенты
     double discriminant = 0, x1 = 0, x2 = 0;
@@ -20,16 +30,16 @@ int main() {
     }
     
     // Частные случаи
-    if (a == 0) {
-    	if (b == 0) {
-        	if (c == 0) {
+    if (sravn(a, 0) == 1) {
+    	if (sravn(b, 0) == 1) {
+        	if (sravn(c, 0) == 1) {
        		 printf("Бесконечное кол-во корней\n");
       	  } else {
             	printf("Корней нет\n");
             }
         } else {
             x1 = -c / b;
-        	printf("Единствпнный корень:\n");
+        	printf("Единственный корень:\n");
       	  printf("x = %E\n", x1);
         }
     } else {
@@ -42,7 +52,7 @@ int main() {
         	printf("Два действительных корня:\n");
         	printf("x1 = %E\n", x1);
         	printf("x2 = %E\n", x2);
-        } else if (discriminant == 0) {
+        } else if (sravn(discriminant, 0) == 1) {
         	x1 = -b / (2 * a);
         	printf("Один действительный корень:\n");
         	printf("x = %E\n", x1);
