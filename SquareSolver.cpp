@@ -1,4 +1,4 @@
-#include <stdio.h>
+ #include <stdio.h>
 #include <math.h>
 #include <ctype.h>
 
@@ -16,40 +16,9 @@ int sravn(double a, double b)
 }
 
 
-int main() 
+int solver(double a, double b, double c)
 {
-    double a = 1, b = 1, c = 1; // Коэффициенты
     double discriminant = 0, x1 = 0, x2 = 0;
-
-    printf("Введите коэффициенты a, b и c: ");
-    
-    // Проверка корректности ввода
-    int read_count = scanf("%lf %lf %lf", &a, &b, &c);
-	if (read_count != 3) 
-    {
-		printf("Ошибка: нужно ввести три числа\n");
-		return 1;
-    }
-
-
-    // Проверка NaN
-    if (isnan(a) || isnan(b) || isnan(c))
-    {
-        printf("Ошибка: введено значение NaN\n");
-        return 1;
-    }
-
-	// Проверка лишних символов
-    int next_char;
-    while ((next_char = getchar()) != '\n' && next_char != EOF)
-    {
-        if (!isspace(next_char)) // Проверка пробела
-        {
-        printf("Ошибка: после трёх чисел обнаружены лишние символы.\n");
-            return 1;
-        }
-    }
-
     // Частные случаи
     if (sravn(a, 0) == 1) 
     {
@@ -95,6 +64,56 @@ int main()
 			printf("Корней нет\n");
         }
     }
+    return 0;
+}
 		
+
+int correct_input(double *a, double *b, double *c)
+{
+    printf("Введите коэффициенты a, b и c: ");
+    
+    // Ввод и проверка чисел
+    int read_count = scanf("%lf %lf %lf", a, b, c);
+    if (read_count != 3) 
+    {
+        printf("Ошибка: нужно ввести три числа\n");
+        return 1;
+    }
+    
+    // Проверка NaN
+    if (isnan(*a) || isnan(*b) || isnan(*c))
+    {
+        printf("Ошибка: введено значение NaN\n");
+        return 1;
+    }
+    
+    // Проверка лишних символов
+    else
+    {
+		int next_char;
+		while ((next_char = getchar()) != '\n' && next_char != EOF)
+		{
+	     if (!isspace(next_char)) // Проверка пробела
+			{
+		    	printf("Ошибка: после трёх чисел обнаружены лишние символы.\n");
+	        	return 1;
+	    	}
+		}
+		return 0;
+    }
+    
+    return 0;
+}
+
+
+int main() 
+{
+    double a = 1, b = 1, c = 1; // Коэффициенты
+    
+    if (correct_input(&a, &b, &c) == 0)
+    {
+        solver(a, b, c);
+    }
+    
     return 0;
 }
