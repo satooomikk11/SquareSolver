@@ -95,7 +95,7 @@ int square_equation_solver(double a, double b, double c, double *x1, double *x2)
 
 int check_extra_chars()
 {
-    int next_char;
+    int next_char = 0;
     while ((next_char = getchar()) != '\n' && next_char != EOF)
     {
         if (!isspace(next_char)) // Проверка пробела
