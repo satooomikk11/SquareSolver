@@ -3,72 +3,112 @@
 #include <ctype.h>
 
 
-int sravn(double a, double b) 
+int are_numbers_equal(double a, double b) 
 {
-	if (fabs(a - b) > 0.000001) 
-	{
-    	return 0; // Числа не равны
-	} 
-	else
-	{
-		return 1; // Числа равны
-	}
+    if (fabs(a - b) > 0.000001) 
+    {
+        return 0; // Числа не равны
+    } 
+    else
+    {
+        return 1; // Числа равны
+    }
 }
 
 
-int solver(double a, double b, double c)
+int solution_output(int solution_type, double x1, double x2)
 {
-    double discriminant = 0, x1 = 0, x2 = 0;
-    // Частные случаи
-    if (sravn(a, 0) == 1) 
+    switch(solution_type)
     {
-    	if (sravn(b, 0) == 1) 
-    	{
-        	if (sravn(c, 0) == 1) 
-        	{
-       		 printf("Бесконечное кол-во корней\n");
-      	  } 
-      	  else 
-      	  {
-            	printf("Корней нет\n");
+        case 0: // Бесконечное количество решений
+            printf("Бесконечное кол-во корней\n");
+            break;
+        case 1: // Нет решений
+            printf("Корней нет\n");
+            break;
+        case 2: // Одно решение
+            printf("Единственный корень:\n"
+                      "x = %g\n", x1);
+            break;
+        case 3: // Два решения
+            printf("Два действительных корня\n"
+                      "x1 = %g\n"
+                      "x2 = %g\n", x1, x2);
+            break;
+        case 4: // Одно решение (квадратное)
+            printf("Один действительный корень:\n"
+                      "x = %g\n", x1);
+            break;
+    }
+}
+
+
+int square_equation_solver(double a, double b, double c, double *x1, double *x2)
+{
+    double discriminant = 0;
+    *x1 = 0;
+    *x2 = 0;
+
+    // Частные случаи
+    if (are_numbers_equal(a, 0) == 1) 
+    {
+        if (are_numbers_equal(b, 0) == 1) 
+        {
+            if (are_numbers_equal(c, 0) == 1) 
+            {
+                return 0; // Бесконечное количество решений
+            } 
+            else 
+            {
+                return 1; // Нет решений
             }
-        } 
-        else 
-        {
-            x1 = -c / b;
-        	printf("Единственный корень:\n"
-      	  		  "x = %g\n", x1);;
         }
-	} 
-	else 
-	{
-    	discriminant = b * b - 4 * a * c;
- 
-		// Проверка дискриминанта
-		if (discriminant > 0) 
-		{
-        	x1 = (-b - sqrt(discriminant)) / (2 * a);
-        	x2 = (-b + sqrt(discriminant)) / (2 * a);
-        	printf("Два действительных корня\n"
-       			   "x1 = %g\n"
-        			  "x2 = %g\n", x1, x2);
-        } 
-        else if (sravn(discriminant, 0) == 1) 
-        {
-        	x1 = -b / (2 * a);
-        	printf("Один действительный корень:\n"
-        			  "x = %g\n", x1);
-        } 
         else 
         {
-			printf("Корней нет\n");
+            *x1 = -c / b;
+            return 2; // Одно решение
+        }
+    }
+    else 
+    {
+        discriminant = b * b - 4 * a * c;
+ 
+        // Проверка дискриминанта
+        if (discriminant > 0) 
+        {
+            *x1 = (-b - sqrt(discriminant)) / (2 * a);
+            *x2 = (-b + sqrt(discriminant)) / (2 * a);
+            return 3; // Два решения
+        }
+        else if (are_numbers_equal(discriminant, 0) == 1) 
+        {
+            *x1 = -b / (2 * a);
+            return 4; // Одно решение (D = 0)
+        }
+        else 
+        {
+            return 1; // Нет решений
+        }
+    }
+}
+
+
+int check_extra_chars()
+{
+    int next_char;
+    while ((next_char = getchar()) != '\n' && next_char != EOF)
+    {
+        if (!isspace(next_char)) // Проверка пробела
+        {
+            printf("Ошибка: после трёх чисел обнаружены лишние символы.\n");
+            return 1;
         }
     }
     return 0;
 }
-		
 
-int correct_input(double *a, double *b, double *c)
+
+int input_validator(double *a, double *b, double *c)
 {
     printf("Введите коэффициенты a, b и c: ");
     
@@ -88,32 +128,23 @@ int correct_input(double *a, double *b, double *c)
     }
     
     // Проверка лишних символов
-    else
-    {
-		int next_char;
-		while ((next_char = getchar()) != '\n' && next_char != EOF)
-		{
-	     if (!isspace(next_char)) // Проверка пробела
-			{
-		    	printf("Ошибка: после трёх чисел обнаружены лишние символы.\n");
-	        	return 1;
-	    	}
-		}
-		return 0;
-    }
-    
-    return 0;
+    return check_extra_chars();
 }
 
 
 int main() 
 {
-    double a = 1, b = 1, c = 1; // Коэффициенты
+    double a = 0, b = 0, c = 0; // Коэффициенты
+    double x1 = 0, x2 = 0; // Корни
     
-    if (correct_input(&a, &b, &c) == 0)
+    if (input_validator(&a, &b, &c) != 0)
     {
-        solver(a, b, c);
+        printf("Программа завершена из-за ошибки ввода.\n");
+        return 1;
     }
+    
+    int solution_type = square_equation_solver(a, b, c, &x1, &x2);
+    solution_output(solution_type, x1, x2);
     
     return 0;
 }
