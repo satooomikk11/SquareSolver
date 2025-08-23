@@ -20,6 +20,9 @@
 // todo --help cli option
 
 // enum declaration
+
+// new comment
+
 typedef enum {
     SOLUTION_SUCCESS = 0,
     SOLUTION_INVALID_TYPE = 1
