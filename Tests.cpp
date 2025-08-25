@@ -5,6 +5,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define COLOR_RED   "\033[1;31m"
+#define COLOR_GREEN "\033[32m"
+#define COLOR_RESET "\033[0m"
+
 #include "Tests.h"
 #include "Solver.h"
 #include "Input.h"
@@ -36,7 +40,7 @@ TestData* read_test_cases(const char *filename, int *test_count)
     FILE *file = fopen(filename, "r");
     if (file == NULL)
         {
-        printf("Error: cannot open test file '%s'\n", filename);
+        printf(COLOR_RED "Error: cannot open test file '%s'\n" COLOR_RESET, filename);
         *test_count = 0;
         return NULL;
         }
@@ -68,7 +72,7 @@ TestData* read_test_cases(const char *filename, int *test_count)
     TestData *test_data = (TestData*)malloc(count * sizeof(TestData));
     if (test_data == NULL)
         {
-        printf("Error: memory allocation failed\n");
+        printf(COLOR_RED "Error: memory allocation failed\n" COLOR_RESET);
         fclose(file);
         *test_count = 0;
         return NULL;
@@ -180,7 +184,7 @@ void print_test_result(const TestData *test, const Equation *result, bool passed
     {
     assert(test != NULL);
     assert(result != NULL);
-    printf("Test %d: %s - ", test_num, passed ? "PASSED" : "FAILED");
+    printf("Test %d: %s - ", test_num, passed ? COLOR_GREEN "PASSED" COLOR_RESET : COLOR_RED "FAILED" COLOR_RESET);
 
     if (strlen(test->description) > 0)
         {

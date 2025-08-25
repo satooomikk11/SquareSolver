@@ -5,6 +5,10 @@
 #include <stdbool.h>
 #include <TXLib.h>
 
+#define COLOR_RED   "\033[1;31m"
+#define COLOR_GREEN "\033[32m"
+#define COLOR_RESET "\033[0m"
+
 #include "Input.h"
 
 const double MIN_DIFF = 1e-10;
@@ -25,7 +29,7 @@ int check_extra_chars(void)
         {
         if (!isspace(next_char))
             {
-            printf("Error: extra characters found after three numbers!\n");
+            printf(COLOR_RED "Error: extra characters found after three numbers!\n" COLOR_RESET);
             return 1;
             }
         }
@@ -42,14 +46,14 @@ int entering_coefficients_and_checking(struct Equation *eq)
     int read_count = scanf("%lg %lg %lg", &eq->a, &eq->b, &eq->c);
     if (read_count != 3)
         {
-        printf("Error: you need to enter three numbers!\n");
+        printf(COLOR_RED "Error: you need to enter three numbers!\n" COLOR_RESET);
         return 1;
         }
 
     // NaN checking
     if (isnan(eq->a) || isnan(eq->b) || isnan(eq->c))
         {
-        printf("Error: the NaN value is entered!\n");
+        printf(COLOR_RED "Error: the NaN value is entered!\n" COLOR_RESET);
         return 1;
         }
 

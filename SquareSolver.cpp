@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#define COLOR_RED   "\033[1;31m"
+#define COLOR_GREEN "\033[32m"
+#define COLOR_RESET "\033[0m"
+
 #include "Equation.h"
 #include "Input.h"
 #include "Solver.h"
@@ -16,12 +20,12 @@ int main(int argc, char *argv[])
             {
             if (argc > 2)
                 {
-                // Запуск тестов из указанного файла
+                // testing from another file
                 unittest_solvesquare_from_file(argv[2]);
                 }
             else
                 {
-                // Запуск тестов из файла по умолчанию
+                // testing from tests.txt
                 unittest_solvesquare();
                 }
             }
@@ -29,7 +33,7 @@ int main(int argc, char *argv[])
             {
             if (entering_coefficients_and_checking(&eq) != 0)
                 {
-                printf("The program is terminated due to an input error.\n");
+                printf(COLOR_RED "The program is terminated due to an input error.\n" COLOR_RESET);
                 return 1;
                 }
 
@@ -48,12 +52,11 @@ int main(int argc, char *argv[])
         }
     else
         {
-        // Режим по умолчанию: сначала тесты, потом решение
         unittest_solvesquare();
 
         if (entering_coefficients_and_checking(&eq) != 0)
             {
-            printf("The program is terminated due to an input error.\n");
+            printf(COLOR_RED "The program is terminated due to an input error.\n" COLOR_RESET);
             return 1;
             }
 

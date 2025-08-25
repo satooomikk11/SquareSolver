@@ -4,6 +4,10 @@
 #include <stdbool.h>
 #include <TXLib.h>
 
+#define COLOR_RED   "\033[1;31m"
+#define COLOR_GREEN "\033[32m"
+#define COLOR_RESET "\033[0m"
+
 #include "Solver.h"
 #include "Input.h"
 
@@ -80,7 +84,7 @@ SolutionResult solution_output(const struct Equation *eq)
     switch(eq->type)
         {
         default:
-            printf("Wrong solution_type!\n");
+            printf(COLOR_RED "Wrong solution_type!\n" COLOR_RESET);
             return SOLUTION_INVALID_TYPE;
 
         case INFINITE_SOLUTIONS:
