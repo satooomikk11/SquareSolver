@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "equation.h"
-#include "input.h"
-#include "solver.h"
-#include "tests.h"
+#include "Equation.h"
+#include "Input.h"
+#include "Solver.h"
+#include "Tests.h"
 
 int main(int argc, char *argv[])
     {
