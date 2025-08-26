@@ -5,31 +5,47 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define COLOR_RED   "\033[1;31m"
-#define COLOR_GREEN "\033[32m"
-#define COLOR_RESET "\033[0m"
-
 #include "Tests.h"
 #include "Solver.h"
-#include "Input.h"
+#include "doubles.h"
+#include "define_colors.h"
 
 const int MAX_LINE_LENGTH = 256;
 const int MAX_DESCRIPTION_LENGTH = 100;
 const char* TEST_FILENAME = "tests.txt";
 
-// swap two doubles
-void swap_double(double *a, double *b)
-    {
-    assert(a != NULL);
-    assert(b != NULL);
 
-    if (*a > *b)
+// count number of test cases in file
+int count_test_cases(FILE *file)
+    {
+    assert(file != NULL);
+
+    char line[MAX_LINE_LENGTH] = {0};
+    int count = 0;
+
+    while (fgets(line, sizeof(line), file))
         {
-        double temp = *a;
-        *a = *b;
-        *b = temp;
+        if (line[0] == '#' || line[0] == '\n')
+            {
+            continue;
+            }
+
+        double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
+        int type = 0;
+        char description[MAX_DESCRIPTION_LENGTH] = {0};
+
+        int parsed = sscanf(line, "%lg %lg %lg %d %lg %lg %[^\n]",
+                            &a, &b, &c, &type, &x1, &x2, description);
+
+        if (parsed >= 6)
+            {
+            count++;
+            }
         }
+
+    return count;
     }
+
 
 // read test cases from file and put into a dynamic array
 TestData* read_test_cases(const char *filename, int *test_count)
@@ -45,25 +61,8 @@ TestData* read_test_cases(const char *filename, int *test_count)
         return NULL;
         }
 
-    // count - number of test cases
-    char line[MAX_LINE_LENGTH] = {0};
-    int count = 0;
-
-    while (fgets(line, sizeof(line), file))
-        {
-        if (line[0] == '#' || line[0] == '\n')
-            continue;
-
-        double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
-        int type = 0;
-        char description[MAX_DESCRIPTION_LENGTH] = {0};
-
-        int parsed = sscanf(line, "%lg %lg %lg %d %lg %lg %[^\n]",
-                            &a, &b, &c, &type, &x1, &x2, description);
-
-        if (parsed >= 6)
-            count++;
-        }
+    // count number of test cases using helper function
+    int count = count_test_cases(file);
 
     // for second reading of the file
     rewind(file);
@@ -80,26 +79,33 @@ TestData* read_test_cases(const char *filename, int *test_count)
 
     // read test data
     int index = 0;
+    char line[MAX_LINE_LENGTH] = {0};
     while (fgets(line, sizeof(line), file) && index < count)
         {
         if (line[0] == '#' || line[0] == '\n')
+            {
             continue;
+            }
 
         TestData *current = &test_data[index];
         char description[MAX_DESCRIPTION_LENGTH] = {0};
 
         int parsed = sscanf(line, "%lg %lg %lg %d %lg %lg %[^\n]",
-                          &current->a, &current->b, &current->c,
-                          &current->expected_type,
-                          &current->expected_x1, &current->expected_x2,
-                          description);
+                            &current->a, &current->b, &current->c,
+                            &current->expected_type,
+                            &current->expected_x1, &current->expected_x2,
+                            description);
 
         if (parsed >= 6)
             {
             if (parsed >= 7)
+                {
                 strncpy(current->description, description, MAX_DESCRIPTION_LENGTH - 1);
+                }
             else
+                {
                 strcpy(current->description, "");
+                }
 
             index++;
             }
@@ -128,7 +134,9 @@ bool run_test_case(const TestData *test, Equation *result)
 
     // check solution type
     if (test->expected_type != result->type)
+        {
         return false;
+        }
 
     // check solutions
     switch (test->expected_type)
@@ -154,7 +162,7 @@ bool run_test_case(const TestData *test, Equation *result)
             return are_doubles_equal(exp1, res1) && are_doubles_equal(exp2, res2);
             }
 
-        default:
+            default:
             return false;
         }
     }

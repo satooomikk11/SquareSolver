@@ -4,12 +4,9 @@
 #include <stdbool.h>
 #include <TXLib.h>
 
-#define COLOR_RED   "\033[1;31m"
-#define COLOR_GREEN "\033[32m"
-#define COLOR_RESET "\033[0m"
-
 #include "Solver.h"
-#include "Input.h"
+#include "doubles.h"
+#include "define_colors.h"
 
 
 // choosing type of solution

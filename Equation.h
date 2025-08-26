@@ -26,12 +26,4 @@ struct Equation
     SolutionType type;
     };
 
-struct TestData
-    {
-    double a, b, c;
-    int expected_type;
-    double expected_x1, expected_x2;
-    char description[100];
-    };
-
 #endif // EQUATION_H

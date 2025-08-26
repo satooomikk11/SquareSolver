@@ -5,20 +5,9 @@
 #include <stdbool.h>
 #include <TXLib.h>
 
-#define COLOR_RED   "\033[1;31m"
-#define COLOR_GREEN "\033[32m"
-#define COLOR_RESET "\033[0m"
-
 #include "Input.h"
-
-const double MIN_DIFF = 1e-10;
-
-
-// comparing two doubles
-int are_doubles_equal(double a, double b)
-    {
-    return fabs(a - b) < MIN_DIFF;
-    }
+#include "doubles.h"
+#include "define_colors.h"
 
 
 // extra chars checking
@@ -33,6 +22,10 @@ int check_extra_chars(void)
             return 1;
             }
         }
+    // MY_ASSERT(x != 0);  // я упал! сообщение об ошибке, функция откуда он вызвался, строку, имя файла
+    // MY_ASSERT(x != 0, "x pointer is NULL!");
+    // MY_ASSERT(x != 0, "x pointer is %p\n", x);
+
     return 0;
     }
 
