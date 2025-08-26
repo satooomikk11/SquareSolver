@@ -22,9 +22,6 @@ int check_extra_chars(void)
             return 1;
             }
         }
-    // MY_ASSERT(x != 0);  // я упал! сообщение об ошибке, функция откуда он вызвался, строку, имя файла
-    // MY_ASSERT(x != 0, "x pointer is NULL!");
-    // MY_ASSERT(x != 0, "x pointer is %p\n", x);
 
     return 0;
     }
